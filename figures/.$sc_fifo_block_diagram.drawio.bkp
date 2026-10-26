@@ -1,0 +1,159 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="sc_fifo_block" name="sc_fifo Block Diagram">
+    <mxGraphModel dx="1400" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="760" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Top-level boundary -->
+        <mxCell id="top" value="&lt;b&gt;sc_fifo&lt;/b&gt; (architecture rtl)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#333333;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="160" y="60" width="1070" height="610" as="geometry" />
+        </mxCell>
+
+        <!-- Inputs -->
+        <mxCell id="in_data" value="data_in [WIDTH-1:0]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="10" y="115" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="in_we" value="write_enable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="10" y="205" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="in_re" value="read_enable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="10" y="265" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="in_srst" value="srst" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="10" y="365" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="in_clk" value="clk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="10" y="605" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Internal blocks -->
+        <mxCell id="ctrl" value="&lt;b&gt;Control Logic&lt;/b&gt;&lt;br&gt;&lt;br&gt;wr_ok = write_enable&lt;br&gt;· ¬full · ¬srst&lt;br&gt;&lt;br&gt;rd_ok = read_enable&lt;br&gt;· ¬empty · ¬srst" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="220" y="160" width="200" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="wrptr" value="&lt;b&gt;wr_ptr&lt;/b&gt;&lt;br&gt;+1 on wr_ok" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="500" y="170" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rdptr" value="&lt;b&gt;rd_ptr&lt;/b&gt;&lt;br&gt;+1 on rd_ok" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="500" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="bram" value="&lt;b&gt;blk_mem_gen_0&lt;/b&gt;&lt;br&gt;Simple Dual-Port&lt;br&gt;Block RAM&lt;br&gt;DEPTH × WIDTH&lt;br&gt;(32 × 16)&lt;br&gt;&lt;br&gt;Port A: write&lt;br&gt;Port B: read" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="100" width="180" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="cnt" value="&lt;b&gt;Count &amp;amp; Flag Registers&lt;/b&gt;&lt;br&gt;count: +1 write only, −1 read only&lt;br&gt;empty: count = 0&lt;br&gt;full: count = DEPTH&lt;br&gt;almost_empty / almost_full:&lt;br&gt;threshold compares" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="500" y="450" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="dpipe" value="&lt;b&gt;Data Pipeline&lt;/b&gt;&lt;br&gt;dpipe: READ_LATENCY−1 stages" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="940" y="200" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vpipe" value="&lt;b&gt;Valid Pipeline&lt;/b&gt;&lt;br&gt;vpipe: READ_LATENCY stages" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="940" y="370" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mux" value="MUX" style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;horizontal=0;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="130" width="40" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="mux_lbl" value="generate:&lt;br&gt;READ_LATENCY = 1 ?" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="90" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="note_rst" value="srst also clears wr_ptr, rd_ptr, count/flags,&lt;br&gt;both pipelines, and the BRAM output (rstb)" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="180" y="580" width="280" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="note_clk" value="clk drives every register and both BRAM ports (clka, clkb)" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="180" y="610" width="330" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="note_gen" value="&lt;b&gt;Generics&lt;/b&gt;&lt;br&gt;WIDTH = 16, DEPTH = 32&lt;br&gt;ALMOST_EMPTY_THRESHOLD = 1&lt;br&gt;ALMOST_FULL_THRESHOLD = 31&lt;br&gt;READ_LATENCY = 1 … 8" style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;spacingLeft=8;fontSize=10;fillColor=#ffffff;strokeColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="575" width="190" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Outputs -->
+        <mxCell id="out_data" value="data_out [WIDTH-1:0]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="180" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="out_valid" value="valid" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="385" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="out_cnt" value="data_count" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="465" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="out_flags" value="full, empty,&lt;br&gt;almost_full, almost_empty" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="520" width="170" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Edges: inputs -->
+        <mxCell id="e_din" value="dina" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeWidth=2;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.107;entryDx=0;entryDy=0;" edge="1" parent="1" source="in_data" target="bram">
+          <mxGeometry x="0.75" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e_we" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.231;entryDx=0;entryDy=0;" edge="1" parent="1" source="in_we" target="ctrl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_re" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.462;entryDx=0;entryDy=0;" edge="1" parent="1" source="in_re" target="ctrl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_srst" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.846;entryDx=0;entryDy=0;" edge="1" parent="1" source="in_srst" target="ctrl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_clk" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;dashed=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="in_clk" target="note_clk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Edges: control -->
+        <mxCell id="e_wrok" value="wr_ok" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.154;exitDx=0;exitDy=0;entryX=0;entryY=0.5;" edge="1" parent="1" source="ctrl" target="wrptr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_wea" value="wea = wr_ok" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.365;exitDx=0;exitDy=0;entryX=0;entryY=0.554;entryDx=0;entryDy=0;" edge="1" parent="1" source="ctrl" target="bram">
+          <mxGeometry x="0.3" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e_rdok" value="rd_ok" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.615;exitDx=0;exitDy=0;entryX=0;entryY=0.5;" edge="1" parent="1" source="ctrl" target="rdptr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_enb" value="enb = rd_ok" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.769;exitDx=0;exitDy=0;entryX=0;entryY=0.929;entryDx=0;entryDy=0;" edge="1" parent="1" source="ctrl" target="bram">
+          <mxGeometry x="0.3" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e_vin" value="rd_ok" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.923;exitDx=0;exitDy=0;entryX=0;entryY=0.5;" edge="1" parent="1" source="ctrl" target="vpipe">
+          <mxGeometry x="0.6" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e_cntin" value="wr_ok, rd_ok" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;fontSize=10;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="ctrl" target="cnt">
+          <mxGeometry x="0.4" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e_fb" value="full_r, empty_r" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;dashed=1;labelBackgroundColor=#ffffff;fontSize=10;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0.7;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="cnt" target="ctrl">
+          <mxGeometry x="-0.3" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <!-- Edges: pointers to BRAM -->
+        <mxCell id="e_addra" value="addra" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.357;entryDx=0;entryDy=0;" edge="1" parent="1" source="wrptr" target="bram">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_addrb" value="addrb" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.786;entryDx=0;entryDy=0;" edge="1" parent="1" source="rdptr" target="bram">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Edges: read data path -->
+        <mxCell id="e_bypass" value="mem_dout (latency 1)" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeWidth=2;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.179;exitDx=0;exitDy=0;entryX=0;entryY=0.154;entryDx=0;entryDy=0;" edge="1" parent="1" source="bram" target="mux">
+          <mxGeometry x="-0.2" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e_dpin" value="mem_dout (doutb)" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeWidth=2;labelBackgroundColor=#ffffff;fontSize=10;exitX=1;exitY=0.464;exitDx=0;exitDy=0;entryX=0;entryY=0.5;" edge="1" parent="1" source="bram" target="dpipe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dpout" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.769;entryDx=0;entryDy=0;" edge="1" parent="1" source="dpipe" target="mux">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dout" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="mux" target="out_data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_valid" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="vpipe" target="out_valid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Edges: status outputs -->
+        <mxCell id="e_cnt" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;" edge="1" parent="1" source="cnt" target="out_cnt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_flags" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;" edge="1" parent="1" source="cnt" target="out_flags">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
