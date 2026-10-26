@@ -43,13 +43,7 @@ architecture rtl of sc_fifo is
             rstb : IN STD_LOGIC;
             enb : IN STD_LOGIC;
             addrb : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
-<<<<<<< HEAD
             doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
-=======
-            doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-            rsta_busy : OUT STD_LOGIC;
-            rstb_busy : OUT STD_LOGIC 
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
         );
     END COMPONENT;
 
@@ -60,10 +54,7 @@ architecture rtl of sc_fifo is
     signal full_r : std_logic := '0';
     signal a_empty_r : std_logic := '1';
     signal a_full_r : std_logic := '0';
-<<<<<<< HEAD
     signal enb_s : std_logic;
-=======
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
 
     signal wr_ok : std_logic;
     signal rd_ok : std_logic;
@@ -71,11 +62,7 @@ architecture rtl of sc_fifo is
 
     signal mem_dout : std_logic_vector(WIDTH-1 downto 0);
 
-<<<<<<< HEAD
     type data_pipe_t is array (0 to READ_LATENCY-1) of std_logic_vector(WIDTH-1 downto 0);
-=======
-    type data_pipe_t is array (0 to REAL_LATENCY-1) of std_logic_vector(WIDTH-1 downto 0);
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
     signal dpipe : data_pipe_t := (others => (others =>'0'));
     signal val_pipe : std_logic_vector(0 to READ_LATENCY-1) := (others => '0');
 
@@ -83,15 +70,9 @@ begin
     wr_ok <= write_enable and not full_r and not srst;
     rd_ok <= read_enable and not empty_r and not srst;
     wea_v(0) <= wr_ok;
-<<<<<<< HEAD
     enb_s <= rd_ok or srst;
 
     --BRAM declaration from IP catalogue
-=======
-
-    --Generate bram instance from IP Block Memory Generator
-    gen_bram : generate
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
         u_bram : blk_mem_gen_0
             port map (
                 clka => clk,
@@ -101,18 +82,10 @@ begin
                 dina => data_in,
                 clkb => clk,
                 rstb => srst,
-<<<<<<< HEAD
                 enb => enb_s,          
                 addrb => std_logic_vector(rd_ptr),
                 doutb => mem_dout
             );            
-=======
-                enb => rd_ok,          
-                addrb => std_logic_vector(rd_ptr),
-                doutb => mem_dout
-            );            
-    end generate gen_bram;
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
 
     process (clk)
         variable v_count : unsigned(COUNT_W-1 downto 0);
@@ -135,11 +108,7 @@ begin
                 end if;
 
                 v_count := count;
-<<<<<<< HEAD
                 if wr_ok = '1' and rd_ok = '0' then
-=======
-                if wr_ok = '1' and rd_ok = '0';
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
                     v_count := count + 1;
                 elsif wr_ok = '0' and rd_ok = '1' then
                     v_count := count - 1;
@@ -164,11 +133,7 @@ begin
                     a_empty_r <= '0';
                 end if;
 
-<<<<<<< HEAD
                 if v_count >= ALMOST_FULL_THRESHOLD then 
-=======
-                if v_count <= ALMOST_FULL_THRESHOLD then 
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
                     a_full_r <= '1';
                 else 
                     a_full_r <= '0';
@@ -181,21 +146,12 @@ begin
     begin
         if rising_edge(clk) then
             if srst = '1' then
-<<<<<<< HEAD
                 val_pipe <= (others => '0');
                 dpipe <= (others => (others => '0'));
             else 
                 val_pipe(0) <= rd_ok;
                 for i in 1 to READ_LATENCY-1 loop
                     val_pipe(i) <= val_pipe(i-1);
-=======
-                vpipe <= (others => '0');
-                dpipe <= (others => (others => '0'));
-            else 
-                vpipe(0) <= rd_ok;
-                for i in 1 to READ_LATENCY-1 loop
-                    vpipe(i) <= vpipe(i-1);
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
                     if i = 1 then
                         dpipe(i) <= mem_dout;
                     else
@@ -208,19 +164,11 @@ begin
 
     gen_lat1 : if READ_LATENCY = 1 generate
         data_out <= mem_dout;
-<<<<<<< HEAD
     end generate;
     gen_latn : if READ_LATENCY > 1 generate
         data_out <= dpipe(READ_LATENCY -1);
     end generate;
     valid <= val_pipe(READ_LATENCY-1);
-=======
-    end generate
-    gen_latn : if READ_LATENCY > 1 generate
-        data_out <= dpipe(READ_LATENCY -1);
-    end generate;
-    valid <= vpipe(READ_LATENCY-1);
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
     data_count <= std_logic_vector(count);
     empty <= empty_r;
     full <= full_r;

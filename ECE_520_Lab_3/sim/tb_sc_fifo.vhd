@@ -7,46 +7,20 @@ use std.textio.all;
 
 entity tb_sc_fifo is
     generic (
-<<<<<<< HEAD
-        CLK_PERIOD : time    := 20 ns;
-        NUM_RANDOM : integer := 20;   -- must match n python script
-=======
         CLK_PERIOD   : time    := 20 ns;
-        NUM_RANDOM   : integer := 20;   -- must match n in generate_fifo_data.py
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
+        NUM_RANDOM   : integer := 20;   -- must match n in generate_test_data.py
         READ_LATENCY : integer := 1
     );
 end entity tb_sc_fifo;
 
 architecture sim of tb_sc_fifo is
 
-<<<<<<< HEAD
-=======
     -- Component declaration (works whether sc_fifo is VHDL or Verilog in Vivado)
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
     component sc_fifo is
         generic (
             READ_LATENCY : positive := 1
         );
         port (
-<<<<<<< HEAD
-            clk : in  std_logic;
-            srst : in  std_logic;
-            data_in : in  std_logic_vector(15 downto 0);
-            write_enable : in  std_logic;
-            read_enable : in  std_logic;
-            data_count : out std_logic_vector(5 downto 0);
-            valid : out std_logic;
-            data_out : out std_logic_vector(15 downto 0);
-            almost_full : out std_logic;
-            almost_empty : out std_logic;
-            full : out std_logic;
-            empty  : out std_logic
-        );
-    end component;
-
-    constant DEPTH : integer := 32;
-=======
             clk          : in  std_logic;
             srst         : in  std_logic;
             data_in      : in  std_logic_vector(15 downto 0);
@@ -63,29 +37,10 @@ architecture sim of tb_sc_fifo is
     end component;
 
     constant DEPTH     : integer := 32;
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
     constant AE_THRESH : integer := 1;
     constant AF_THRESH : integer := 31;
     constant NUM_WORDS : integer := 4*DEPTH + 16 + NUM_RANDOM;  -- 144 pattern words + random
 
-<<<<<<< HEAD
-    signal clk : std_logic := '0';
-    signal srst : std_logic := '1';
-    signal data_in : std_logic_vector(15 downto 0) := (others => '0');
-    signal write_enable : std_logic := '0';
-    signal read_enable : std_logic := '0';
-    signal data_count : std_logic_vector(5 downto 0);
-    signal valid : std_logic;
-    signal data_out : std_logic_vector(15 downto 0);
-    signal almost_full : std_logic;
-    signal almost_empty : std_logic;
-    signal full : std_logic;
-    signal empty : std_logic;
-    signal sim_done : boolean := false;
-
-    type word_array_t is array (0 to NUM_WORDS-1) of std_logic_vector(15 downto 0);
-
-=======
     signal clk          : std_logic := '0';
     signal srst         : std_logic := '1';
     signal data_in      : std_logic_vector(15 downto 0) := (others => '0');
@@ -103,18 +58,13 @@ architecture sim of tb_sc_fifo is
     type word_array_t is array (0 to NUM_WORDS-1) of std_logic_vector(15 downto 0);
 
     -- Returns the value of a hex digit, or -1 if c is not a hex digit
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
     function hex_digit(c : character) return integer is
     begin
         case c is
             when '0' to '9' => return character'pos(c) - character'pos('0');
             when 'a' to 'f' => return character'pos(c) - character'pos('a') + 10;
             when 'A' to 'F' => return character'pos(c) - character'pos('A') + 10;
-<<<<<<< HEAD
-            when others => return -1;
-=======
             when others     => return -1;
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
         end case;
     end function;
 
@@ -125,22 +75,6 @@ begin
             READ_LATENCY => READ_LATENCY
         )
         port map (
-<<<<<<< HEAD
-            clk => clk,
-            srst => srst,
-            data_in => data_in,
-            write_enable => write_enable,
-            read_enable => read_enable,
-            data_count => data_count,
-            valid => valid,
-            data_out => data_out,
-            almost_full => almost_full,
-            almost_empty => almost_empty,
-            full => full,
-            empty  => empty
-        );
-
-=======
             clk          => clk,
             srst         => srst,
             data_in      => data_in,
@@ -156,7 +90,6 @@ begin
         );
 
     -- Clock generation (stops once the test finishes so the sim can end)
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
     clk_proc : process
     begin
         while not sim_done loop
@@ -169,26 +102,6 @@ begin
     end process;
 
     stim_proc : process
-<<<<<<< HEAD
-        file in_file : text open read_mode  is "input_data.txt";
-        file results_file : text open write_mode is "test_results.txt";
-
-        variable file_data : word_array_t;  -- unread entries stay 'U' (like X in $readmemh)
-        variable errors : integer := 0;
-
-        variable l : line;
-        variable c : character;
-        variable ok : boolean;
-        variable val : natural;
-        variable in_tok : boolean;
-        variable idx : natural := 0;
-
-        variable wr_idx    : natural := 0;  
-        variable exp_idx   : natural := 0;  
-        variable count_exp : natural := 0;  
-        variable last_out  : std_logic_vector(15 downto 0) := (others => '0');
-
-=======
         file in_file      : text open read_mode  is "input_data.txt";
         file results_file : text open write_mode is "test_results.txt";
 
@@ -210,7 +123,6 @@ begin
 
         -- Equivalent of the "raw_fd | 1" multi-channel descriptor:
         -- write each message to the results file AND the console
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
         procedure log_msg(msg : string) is
             variable lo : line;
         begin
@@ -225,12 +137,8 @@ begin
             errors := errors + 1;
             log_msg("[" & time'image(now) & "] FAIL: " & msg);
         end procedure;
-<<<<<<< HEAD
-        
-=======
 
         -- Compare data_count and all four flags against the expected count
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
         procedure check_status is
         begin
             if to_integer(unsigned(data_count)) /= count_exp then
@@ -249,16 +157,11 @@ begin
             if (almost_full = '1') /= (count_exp >= AF_THRESH) then
                 fail("almost_full=" & std_logic'image(almost_full) & " count=" & integer'image(count_exp));
             end if;
-<<<<<<< HEAD
-        end procedure; 
-        
-=======
         end procedure;
 
         -- One clock cycle with the given enables. Accepted writes take the next
         -- file word; rejected writes drive 0x1234, which must never come out.
         -- Every valid output must be the next word in file order.
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
         procedure cycle(wr, rd : std_logic) is
             variable wr_ok, rd_ok : boolean;
         begin
@@ -303,20 +206,13 @@ begin
                 fail("valid=" & std_logic'image(valid) & " after reset, expected '0'");
             end if;
             count_exp := 0;
-<<<<<<< HEAD
-            exp_idx   := wr_idx;                     
-=======
             exp_idx   := wr_idx;                     -- words in the FIFO were discarded
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
             last_out  := (others => '0');
             check_status;
         end procedure;
 
     begin
-<<<<<<< HEAD
-=======
         -- Equivalent of $readmemh: whitespace-separated hex values, // comments allowed
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
         while not endfile(in_file) and idx < NUM_WORDS loop
             readline(in_file, l);
             in_tok := false;
@@ -344,10 +240,7 @@ begin
                    integer'image(NUM_WORDS) & " (check NUM_RANDOM)"
             severity failure;
 
-<<<<<<< HEAD
-=======
         -- Reset: outputs return to 0, empty = 1, full = 0
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
         srst <= '1';
         wait for 2 * CLK_PERIOD;
         check_reset;
@@ -401,11 +294,7 @@ begin
         end if;
 
         file_close(results_file);
-<<<<<<< HEAD
-        sim_done <= true; 
-=======
         sim_done <= true;  -- stops the clock; with no more events the sim ends
->>>>>>> 9c999a566532bb286978b95a093d3d0d9246df83
         wait;
     end process;
 
